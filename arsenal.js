@@ -1,50 +1,36 @@
- // Comment form submission handler
- const commentForm = document.getElementById('comment-form');
- const commentList = document.getElementById('comment-list');
- 
- // Load comments from localStorage if they exist
- window.onload = function() {
-   const savedComments = JSON.parse(localStorage.getItem('comments')) || [];
-   savedComments.forEach(comment => {
-     addCommentToDOM(comment);
-   });
- };
+// JavaScript code for handling the comments section
 
- // Add comment to DOM
- function addCommentToDOM(comment) {
-   const li = document.createElement('li');
-   li.innerHTML = `
-     <p><strong>${comment.name}:</strong> ${comment.text}</p>
-     <span class="comment-timestamp">Submitted on ${comment.timestamp}</span>
-   `;
-   commentList.appendChild(li);
- }
+// Select the form and the comments list
+const commentForm = document.getElementById('comment-form');
+const commentList = document.getElementById('comment-list');
 
- // Handle form submission
- commentForm.addEventListener('submit', function(event) {
-   event.preventDefault();
-
-   const userName = document.getElementById('user-name').value;
-   const userComment = document.getElementById('user-comment').value;
-   
-   // Get current date and time
-   const timestamp = new Date().toLocaleString();
-
-   // Create a comment object
-   const newComment = {
-     name: userName,
-     text: userComment,
-     timestamp: timestamp
-   };
-
-   // Add comment to localStorage
-   const comments = JSON.parse(localStorage.getItem('comments')) || [];
-   comments.push(newComment);
-   localStorage.setItem('comments', JSON.stringify(comments));
-
-   // Add the new comment to the DOM
-   addCommentToDOM(newComment);
-
-   // Clear the form inputs
-   commentForm.reset();
- });
+// Add an event listener to handle form submission
+commentForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent the form from refreshing the page
+  
+  // Get the user's name and comment
+  const userName = document.getElementById('user-name').value.trim();
+  const userComment = document.getElementById('user-comment').value.trim();
+  
+  if (userName && userComment) {
+    // Create a new list item for the comment
+    const newComment = document.createElement('li');
+    
+    // Create the HTML content for the comment
+    newComment.innerHTML = `
+      <p><strong>${userName}:</strong> ${userComment}</p>
+      <span class="comment-timestamp">Submitted on ${new Date().toLocaleString()}</span>
+    `;
+    
+    // Add the new comment to the comment list
+    commentList.appendChild(newComment);
+    
+    // Display an alert message
+    alert('Information saved');
+    
+    // Clear the form inputs
+    commentForm.reset();
+  } else {
+    alert('Please fill in both fields before submitting your comment.');
+  }
+});
